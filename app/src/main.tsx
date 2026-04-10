@@ -4,10 +4,15 @@ import { ChakraProvider, extendTheme } from '@chakra-ui/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { BrowserRouter } from 'react-router-dom'
 import {
-  ConnectionProvider,
-  WalletProvider,
+  ConnectionProvider as _CP,
+  WalletProvider as _WP,
 } from '@solana/wallet-adapter-react'
-import { WalletModalProvider } from '@solana/wallet-adapter-react-ui'
+import { WalletModalProvider as _WMP } from '@solana/wallet-adapter-react-ui'
+
+// Type workaround for React 18/19 type incompatibility
+const ConnectionProvider = _CP as any
+const WalletProvider = _WP as any
+const WalletModalProvider = _WMP as any
 import { PhantomWalletAdapter, SolflareWalletAdapter } from '@solana/wallet-adapter-wallets'
 import App from './App'
 
