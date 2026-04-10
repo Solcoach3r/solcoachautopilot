@@ -1,11 +1,20 @@
-import { StrictMode } from 'react'
+import { StrictMode, useMemo } from 'react'
 import { createRoot } from 'react-dom/client'
 import { ChakraProvider, extendTheme } from '@chakra-ui/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { BrowserRouter } from 'react-router-dom'
+import {
+  ConnectionProvider,
+  WalletProvider,
+} from '@solana/wallet-adapter-react'
+import { WalletModalProvider } from '@solana/wallet-adapter-react-ui'
+import { PhantomWalletAdapter, SolflareWalletAdapter } from '@solana/wallet-adapter-wallets'
 import App from './App'
 
-// warm theme with Nunito font - very cozy!
+import '@solana/wallet-adapter-react-ui/styles.css'
+
+const RPC_URL = import.meta.env.VITE_RPC_URL || 'https://api.devnet.solana.com'
+
 const theme = extendTheme({
   fonts: {
     heading: `'Nunito', sans-serif`,
@@ -43,14 +52,28 @@ const queryClient = new QueryClient({
   },
 })
 
+function Root() {
+  const wallets = useMemo(() => [new PhantomWalletAdapter(), new SolflareWalletAdapter()], [])
+
+  return (
+    <ConnectionProvider endpoint={RPC_URL}>
+      <WalletProvider wallets={wallets} autoConnect>
+        <WalletModalProvider>
+          <ChakraProvider theme={theme}>
+            <QueryClientProvider client={queryClient}>
+              <BrowserRouter>
+                <App />
+              </BrowserRouter>
+            </QueryClientProvider>
+          </ChakraProvider>
+        </WalletModalProvider>
+      </WalletProvider>
+    </ConnectionProvider>
+  )
+}
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <ChakraProvider theme={theme}>
-      <QueryClientProvider client={queryClient}>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-      </QueryClientProvider>
-    </ChakraProvider>
+    <Root />
   </StrictMode>
 )

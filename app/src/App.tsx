@@ -1,5 +1,6 @@
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, Link as RouterLink } from 'react-router-dom'
 import { Box, Container, Flex, Heading, HStack, Link } from '@chakra-ui/react'
+import { WalletMultiButton } from '@solana/wallet-adapter-react-ui'
 import HomePage from './pages/HomePage'
 import HistoryPage from './pages/HistoryPage'
 import LeaderboardPage from './pages/LeaderboardPage'
@@ -7,7 +8,6 @@ import LeaderboardPage from './pages/LeaderboardPage'
 function App() {
   return (
     <Box minH="100vh">
-      {/* header with warm gradient */}
       <Box
         bgGradient="linear(to-r, brand.400, brand.600)"
         px={6}
@@ -19,21 +19,21 @@ function App() {
               SolCoach
             </Heading>
             <HStack spacing={4}>
-              <Link href="/" color="whiteAlpha.900" fontSize="sm" fontWeight={600}>
+              <Link as={RouterLink} to="/" color="whiteAlpha.900" fontSize="sm" fontWeight={600}>
                 Today
               </Link>
-              <Link href="/history" color="whiteAlpha.800" fontSize="sm">
+              <Link as={RouterLink} to="/history" color="whiteAlpha.800" fontSize="sm">
                 History
               </Link>
-              <Link href="/leaderboard" color="whiteAlpha.800" fontSize="sm">
+              <Link as={RouterLink} to="/leaderboard" color="whiteAlpha.800" fontSize="sm">
                 Leaderboard
               </Link>
+              <WalletMultiButton style={{ fontSize: '13px', height: '36px' }} />
             </HStack>
           </Flex>
         </Container>
       </Box>
 
-      {/* main content */}
       <Container maxW="container.lg" py={8}>
         <Routes>
           <Route path="/" element={<HomePage />} />
