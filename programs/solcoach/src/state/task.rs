@@ -19,6 +19,7 @@ pub enum TaskStatus {
     Accepted,
     Rejected,
     Expired,
+    Resolved,
 }
 
 // the daily task that the AI coach generates for each user

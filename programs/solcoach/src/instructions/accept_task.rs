@@ -7,6 +7,8 @@ use crate::constants::*;
 pub struct AcceptTask<'info> {
     #[account(
         mut,
+        seeds = [TASK_SEED, user.key().as_ref(), &task.day.to_le_bytes()],
+        bump = task.bump,
         constraint = task.user == user.key() @ CoachError::Unauthorized,
         constraint = task.status == TaskStatus::Pending @ CoachError::TaskAlreadyHandled,
     )]

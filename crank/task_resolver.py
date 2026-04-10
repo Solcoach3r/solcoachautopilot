@@ -180,7 +180,7 @@ def parse_task_account(data: bytes) -> dict | None:
         actualResult = None
         if resultTag == 1:
             actualResult = struct.unpack_from('<q', data, offset)[0]
-        offset += 8
+            offset += 8
 
         createdAt = struct.unpack_from('<q', data, offset)[0]
         offset += 8

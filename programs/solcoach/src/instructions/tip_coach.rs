@@ -14,6 +14,8 @@ pub struct TipCoach<'info> {
 
     #[account(
         mut,
+        seeds = [TASK_SEED, user.key().as_ref(), &task.day.to_le_bytes()],
+        bump = task.bump,
         constraint = task.user == user.key() @ CoachError::Unauthorized,
         constraint = task.status == TaskStatus::Accepted @ CoachError::CannotTipRejected,
     )]
@@ -60,7 +62,17 @@ pub fn handler(ctx: Context<TipCoach>, amount: u64) -> Result<()> {
         .checked_sub(platform_fee)
         .ok_or(CoachError::MathOverflow)?;
 
-    // send the vault portion
+    // state updates BEFORE CPI
+    require!(ctx.accounts.task.tip_amount == 0, CoachError::TaskAlreadyHandled);
+    ctx.accounts.task.tip_amount = amount;
+    ctx.accounts.profile.total_tips_given = ctx.accounts.profile.total_tips_given
+        .checked_add(amount)
+        .ok_or(CoachError::MathOverflow)?;
+    ctx.accounts.tip_vault.total_collected = ctx.accounts.tip_vault.total_collected
+        .checked_add(vault_amount)
+        .ok_or(CoachError::MathOverflow)?;
+
+    // send the vault portion (CPI AFTER state updates)
     system_program::transfer(
         CpiContext::new(
             ctx.accounts.system_program.to_account_info(),
@@ -85,15 +97,6 @@ pub fn handler(ctx: Context<TipCoach>, amount: u64) -> Result<()> {
             platform_fee,
         )?;
     }
-
-    // update everything
-    ctx.accounts.task.tip_amount = amount;
-    ctx.accounts.profile.total_tips_given = ctx.accounts.profile.total_tips_given
-        .checked_add(amount)
-        .ok_or(CoachError::MathOverflow)?;
-    ctx.accounts.tip_vault.total_collected = ctx.accounts.tip_vault.total_collected
-        .checked_add(vault_amount)
-        .ok_or(CoachError::MathOverflow)?;
 
     Ok(())
 }

@@ -1,12 +1,14 @@
 use anchor_lang::prelude::*;
 use crate::state::*;
 use crate::errors::CoachError;
-use crate::constants::PROFILE_SEED;
+use crate::constants::{PROFILE_SEED, TASK_SEED};
 
 #[derive(Accounts)]
 pub struct RejectTask<'info> {
     #[account(
         mut,
+        seeds = [TASK_SEED, user.key().as_ref(), &task.day.to_le_bytes()],
+        bump = task.bump,
         constraint = task.user == user.key() @ CoachError::Unauthorized,
         constraint = task.status == TaskStatus::Pending @ CoachError::TaskAlreadyHandled,
     )]
