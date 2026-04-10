@@ -71,13 +71,16 @@ function HistoryPage() {
             const reasonLen = d.readUInt32LE(off); off += 4
             off += reasonLen
             const suggestedAmount = Number(d.readBigUInt64LE(off)); off += 8
-            off += 33 // suggested_mint
+            // suggested_mint: Option<Pubkey> — 1 byte tag + 32 if Some
+            const mintTag = d[off]; off += 1
+            if (mintTag === 1) off += 32
             const statusByte = d[off]; off += 1
             // tip_amount
             off += 8
-            // actual_result: Option<i64>
+            // actual_result: Option<i64> — 1 byte tag + 8 if Some
             const resultTag = d[off]; off += 1
             const actualResult = resultTag === 1 ? Number(d.readBigInt64LE(off)) : null
+            if (resultTag === 1) off += 8
 
             parsed.push({
               pubkey: pubkey.toBase58(),

@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react'
 import { useWallet, useConnection } from '@solana/wallet-adapter-react'
-import { PublicKey, LAMPORTS_PER_SOL, SystemProgram } from '@solana/web3.js'
+import { PublicKey, LAMPORTS_PER_SOL } from '@solana/web3.js'
 import {
   Box,
   VStack,
@@ -94,7 +94,9 @@ function HomePage() {
           off += 1 // risk_tolerance
           off += 1 // preferred_protocols
           off += 1 // is_pro
-          off += 9 // pro_expires_at Option<i64>
+          // pro_expires_at: Option<i64> — 1 byte tag + 8 bytes if Some
+          const proTag = d[off]; off += 1
+          if (proTag === 1) off += 8
           // level is computed from tasks
           const level = Math.floor(tasksAccepted / 5) + 1
           setProfile({ currentStreak, bestStreak, tasksAccepted, tasksRejected, totalTips, level })
@@ -128,7 +130,9 @@ function HomePage() {
           const reasoning = d.subarray(off, off + reasonLen).toString('utf8'); off += reasonLen
           // suggested_amount: u64
           const suggestedAmount = Number(d.readBigUInt64LE(off)); off += 8
-          off += 33 // suggested_mint Option<Pubkey>
+          // suggested_mint: Option<Pubkey> — 1 byte tag + 32 bytes if Some
+          const mintTag = d[off]; off += 1
+          if (mintTag === 1) off += 32
           const statusByte = d[off]
 
           setTask({
