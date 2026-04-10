@@ -20,5 +20,8 @@ venv/
 .vercel
 
 scratch/
+.yield_cache.json
+crank-keypair.json
 WORKLOG.md
 REVIEWS.md
+REFERENCES.md
