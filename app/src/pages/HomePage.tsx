@@ -20,7 +20,7 @@ import {
   StatGroup,
 } from '@chakra-ui/react'
 
-const PROGRAM_ID = import.meta.env.VITE_PROGRAM_ID || 'CoachXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
+const PROGRAM_ID = import.meta.env.VITE_PROGRAM_ID || 'FoTaz3ejexSZgd9byVc1FpgqqqunBno7rx7ahfRMZMkU'
 const PROFILE_SEED = Buffer.from('coach_profile')
 
 interface ProfileData {
