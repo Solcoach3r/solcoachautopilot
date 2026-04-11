@@ -21,6 +21,7 @@ pub struct UserCoachProfile {
     pub best_streak: u16,
     pub total_tips_given: u64,
     pub total_profit_from_tips: i64,
+    pub last_task_day: i64,        // UTC midnight timestamp of the last accepted task (for streak validation)
     pub risk_tolerance: RiskTolerance,
     pub preferred_protocols: u8,   // bitmask: bit0=Marinade, bit1=Jupiter, bit2=Drift, bit3=Kamino
     pub is_pro: bool,

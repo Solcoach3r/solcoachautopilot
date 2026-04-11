@@ -1,6 +1,7 @@
 use anchor_lang::prelude::*;
 use crate::state::{CoachConfig, TipVault};
-use crate::constants::{CONFIG_SEED, TIP_VAULT_SEED};
+use crate::errors::CoachError;
+use crate::constants::{CONFIG_SEED, TIP_VAULT_SEED, BPS_DENOMINATOR};
 
 #[derive(Accounts)]
 pub struct InitializeConfig<'info> {
@@ -30,6 +31,8 @@ pub struct InitializeConfig<'info> {
 
 // sets up the coach platform with the fee settings
 pub fn handler(ctx: Context<InitializeConfig>, tip_fee_bps: u16) -> Result<()> {
+    require!(tip_fee_bps <= BPS_DENOMINATOR as u16, CoachError::MathOverflow);
+
     let config = &mut ctx.accounts.config;
     config.authority = ctx.accounts.authority.key();
     config.treasury = ctx.accounts.authority.key();

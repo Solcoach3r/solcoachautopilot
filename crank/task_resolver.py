@@ -19,7 +19,7 @@ from solders.pubkey import Pubkey
 from solders.keypair import Keypair
 from solana.rpc.api import Client
 from solana.rpc.commitment import Confirmed
-from solana.transaction import Transaction
+from solders.transaction import Transaction
 from solders.instruction import Instruction, AccountMeta
 from apscheduler.schedulers.blocking import BlockingScheduler
 
