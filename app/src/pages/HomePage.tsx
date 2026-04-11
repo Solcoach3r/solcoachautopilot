@@ -157,7 +157,8 @@ function HomePage() {
           const currentStreak = d.readUInt16LE(off); off += 2
           const bestStreak = d.readUInt16LE(off); off += 2
           const totalTips = Number(d.readBigUInt64LE(off)); off += 8
-          off += 8 // total_profit
+          off += 8 // total_profit_from_tips
+          off += 8 // last_task_day
           off += 1 // risk_tolerance
           off += 1 // preferred_protocols
           off += 1 // is_pro
