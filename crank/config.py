@@ -1,28 +1,44 @@
+# SolCoach crank settings
 import os
 import json
 from pathlib import Path
-from dotenv import load_dotenv
 
-load_dotenv()
 
-# solana rpc
-RPC_URL = os.getenv('ANCHOR_PROVIDER_URL', 'https://api.devnet.solana.com')
-PROGRAM_ID = os.getenv('PROGRAM_ID', 'FoTaz3ejexSZgd9byVc1FpgqqqunBno7rx7ahfRMZMkU')
-KEYPAIR_PATH = os.getenv('CRANK_KEYPAIR_PATH', './crank-keypair.json')
+class _Settings:
+    _loaded = False
 
-# claude api
-ANTHROPIC_API_KEY = os.getenv('ANTHROPIC_API_KEY', '')
+    @classmethod
+    def _init(cls):
+        if cls._loaded:
+            return
+        try:
+            from dotenv import load_dotenv
+            load_dotenv()
+        except ImportError:
+            pass
+        cls._loaded = True
 
-# helius for wallet data
-HELIUS_API_KEY = os.getenv('HELIUS_API_KEY', '')
+    @classmethod
+    def env(cls, key, default=''):
+        cls._init()
+        return os.getenv(key, default)
+
+
+RPC_URL = _Settings.env('ANCHOR_PROVIDER_URL', 'https://api.devnet.solana.com')
+PROGRAM_ID = _Settings.env('PROGRAM_ID', 'FoTaz3ejexSZgd9byVc1FpgqqqunBno7rx7ahfRMZMkU')
+KEYPAIR_PATH = _Settings.env('CRANK_KEYPAIR_PATH', './crank-keypair.json')
+
+ANTHROPIC_API_KEY = _Settings.env('ANTHROPIC_API_KEY')
+HELIUS_API_KEY = _Settings.env('HELIUS_API_KEY')
+HELIUS_RPC_URL = _Settings.env('HELIUS_RPC_URL')
+
+TASK_GENERATION_CRON = _Settings.env('TASK_GENERATION_CRON', '0 8 * * *')
+YIELD_UPDATE_INTERVAL = int(_Settings.env('YIELD_UPDATE_INTERVAL_MINUTES', '30'))
 
 
 def get_helius_rpc_url() -> str:
     return f'https://devnet.helius-rpc.com/?api-key={HELIUS_API_KEY}'
 
-# scheduling
-TASK_GENERATION_CRON = os.getenv('TASK_GENERATION_CRON', '0 8 * * *')
-YIELD_UPDATE_INTERVAL = int(os.getenv('YIELD_UPDATE_INTERVAL_MINUTES', '30'))
 
 # pda seeds (match anchor program)
 CONFIG_SEED = b'coach_config'

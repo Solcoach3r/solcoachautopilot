@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, useMemo } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { useWallet, useConnection, useAnchorWallet } from '@solana/wallet-adapter-react'
 import { PublicKey, LAMPORTS_PER_SOL, SystemProgram } from '@solana/web3.js'
 import { AnchorProvider, Program } from '@coral-xyz/anchor'
@@ -93,10 +93,11 @@ function HomePage() {
   const [verified, setVerified] = useState(false)
   const toast = useToast()
 
-  const program = useMemo(() => {
-    if (!anchorWallet) return null
-    const provider = new AnchorProvider(connection, anchorWallet, { commitment: 'confirmed' })
-    return new Program(idl as any, provider)
+  const [program, setProgram] = useState<Program | null>(null)
+  useEffect(() => {
+    if (!anchorWallet) { setProgram(null); return }
+    const prov = new AnchorProvider(connection, anchorWallet, { preflightCommitment: 'confirmed' })
+    setProgram(new Program(idl as any, prov))
   }, [connection, anchorWallet])
 
   const handleRegister = useCallback(async () => {
@@ -117,8 +118,8 @@ function HomePage() {
       toast({ title: 'Profile created! Welcome to SolCoach 🎉', status: 'success', duration: 3000 })
       setHasProfile(true)
       loadData()
-    } catch (err: any) {
-      const msg = err.message || String(err)
+    } catch (err) {
+      const msg = (err as Error)?.message ?? 'Something went wrong'
       if (msg.includes('User rejected')) {
         toast({ title: 'Transaction rejected', status: 'warning', duration: 2000 })
       } else {
@@ -250,7 +251,7 @@ function HomePage() {
         // no task today
       }
     } catch (err) {
-      console.error('[home]', err)
+      // toast shows the error, no need to log
     } finally {
       setLoading(false)
     }
@@ -429,8 +430,8 @@ function HomePage() {
                           .rpc()
                         toast({ title: 'Task accepted! 🔥', description: 'Complete it to grow your streak', status: 'success', duration: 3000 })
                         loadData()
-                      } catch (err: any) {
-                        const msg = err.message || String(err)
+                      } catch (err) {
+                        const msg = (err as Error)?.message ?? 'Something went wrong'
                         if (msg.includes('User rejected')) toast({ title: 'Transaction rejected', status: 'warning', duration: 2000 })
                         else toast({ title: 'Failed', description: msg.slice(0, 80), status: 'error', duration: 3000 })
                       } finally { setActionLoading(false) }
@@ -457,8 +458,8 @@ function HomePage() {
                           .rpc()
                         toast({ title: 'Task skipped', status: 'info', duration: 2000 })
                         loadData()
-                      } catch (err: any) {
-                        const msg = err.message || String(err)
+                      } catch (err) {
+                        const msg = (err as Error)?.message ?? 'Something went wrong'
                         if (msg.includes('User rejected')) toast({ title: 'Transaction rejected', status: 'warning', duration: 2000 })
                         else toast({ title: 'Failed', description: msg.slice(0, 80), status: 'error', duration: 3000 })
                       } finally { setActionLoading(false) }

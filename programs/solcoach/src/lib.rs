@@ -6,6 +6,7 @@ mod instructions;
 mod state;
 
 use instructions::*;
+use instructions as ix;
 
 declare_id!("FoTaz3ejexSZgd9byVc1FpgqqqunBno7rx7ahfRMZMkU");
 
@@ -14,7 +15,7 @@ pub mod solcoach {
     use super::*;
 
     pub fn initialize_config(ctx: Context<InitializeConfig>, tip_fee_bps: u16) -> Result<()> {
-        instructions::initialize_config::handler(ctx, tip_fee_bps)
+        ix::initialize_config::handler(ctx, tip_fee_bps)
     }
 
     pub fn register_user(
@@ -22,7 +23,7 @@ pub mod solcoach {
         risk_tolerance: state::RiskTolerance,
         preferred_protocols: u8,
     ) -> Result<()> {
-        instructions::register_user::handler(ctx, risk_tolerance, preferred_protocols)
+        ix::register_user::handler(ctx, risk_tolerance, preferred_protocols)
     }
 
     pub fn create_daily_task(
@@ -35,26 +36,26 @@ pub mod solcoach {
         suggested_amount: u64,
         suggested_mint: Option<Pubkey>,
     ) -> Result<()> {
-        instructions::create_daily_task::handler(
+        ix::create_daily_task::handler(
             ctx, day_timestamp, task_type, protocol, description, reasoning,
             suggested_amount, suggested_mint,
         )
     }
 
     pub fn accept_task(ctx: Context<AcceptTask>) -> Result<()> {
-        instructions::accept_task::handler(ctx)
+        ix::accept_task::handler(ctx)
     }
 
     pub fn reject_task(ctx: Context<RejectTask>) -> Result<()> {
-        instructions::reject_task::handler(ctx)
+        ix::reject_task::handler(ctx)
     }
 
     pub fn tip_coach(ctx: Context<TipCoach>, amount: u64) -> Result<()> {
-        instructions::tip_coach::handler(ctx, amount)
+        ix::tip_coach::handler(ctx, amount)
     }
 
     pub fn resolve_task(ctx: Context<ResolveTask>, actual_result: i64) -> Result<()> {
-        instructions::resolve_task::handler(ctx, actual_result)
+        ix::resolve_task::handler(ctx, actual_result)
     }
 
     pub fn update_preferences(
@@ -62,6 +63,6 @@ pub mod solcoach {
         risk_tolerance: Option<state::RiskTolerance>,
         preferred_protocols: Option<u8>,
     ) -> Result<()> {
-        instructions::update_preferences::handler(ctx, risk_tolerance, preferred_protocols)
+        ix::update_preferences::handler(ctx, risk_tolerance, preferred_protocols)
     }
 }

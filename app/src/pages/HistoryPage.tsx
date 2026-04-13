@@ -99,7 +99,7 @@ function HistoryPage() {
 
         setTasks(parsed.sort((a, b) => b.day - a.day))
       } catch (err) {
-        console.error('[history]', err)
+        // toast shows the error, no need to log
       } finally {
         if (!cancelled) setLoading(false)
       }

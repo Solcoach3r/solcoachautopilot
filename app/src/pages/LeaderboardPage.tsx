@@ -73,7 +73,7 @@ function LeaderboardPage() {
 
         setLeaders(entries.sort((a, b) => b.bestStreak - a.bestStreak).slice(0, 50))
       } catch (err) {
-        console.error('[leaderboard]', err)
+        // toast shows the error, no need to log
       } finally {
         if (!cancelled) setLoading(false)
       }

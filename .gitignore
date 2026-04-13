@@ -22,9 +22,5 @@ venv/
 scratch/
 .yield_cache.json
 crank-keypair.json
-WORKLOG.md
-REVIEWS.md
-REFERENCES.md
-deploy-keypair.json
 app/vite.config.d.ts
 app/vite.config.js
