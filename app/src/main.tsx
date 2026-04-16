@@ -9,7 +9,6 @@ import {
 } from '@solana/wallet-adapter-react'
 import { WalletModalProvider as _WMP } from '@solana/wallet-adapter-react-ui'
 
-// Type workaround for React 18/19 type incompatibility
 const ConnectionProvider = _CP as any
 const WalletProvider = _WP as any
 const WalletModalProvider = _WMP as any
@@ -38,11 +37,50 @@ const theme = extendTheme({
       800: '#9a3412',
       900: '#7c2d12',
     },
+    warm: {
+      bg: '#FFFBF5',
+      cream: '#FEF3E2',
+      sand: '#FFF7ED',
+    },
+    quest: {
+      stake: '#8B5CF6',
+      swap: '#3B82F6',
+      lp: '#EC4899',
+      claim: '#14B8A6',
+      rebalance: '#F59E0B',
+      default: '#f97316',
+    },
+    streak: {
+      bronze: '#CD7F32',
+      silver: '#C0C0C0',
+      gold: '#FFD700',
+    },
   },
   styles: {
     global: {
       body: {
-        bg: 'gray.50',
+        bg: 'warm.bg',
+        color: '#292524',
+      },
+      '*::-webkit-scrollbar': { width: '6px' },
+      '*::-webkit-scrollbar-track': { bg: 'transparent' },
+      '*::-webkit-scrollbar-thumb': { bg: 'brand.200', borderRadius: '3px' },
+    },
+  },
+  components: {
+    Card: {
+      baseStyle: {
+        container: {
+          borderRadius: '20px',
+          boxShadow: '0 4px 24px rgba(0,0,0,0.04)',
+          overflow: 'hidden',
+        },
+      },
+    },
+    Button: {
+      baseStyle: {
+        fontWeight: 700,
+        borderRadius: 'full',
       },
     },
   },
