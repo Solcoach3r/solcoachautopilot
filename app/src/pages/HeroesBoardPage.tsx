@@ -33,7 +33,7 @@ function shortAddr(addr: string) {
   return addr.slice(0, 4) + '...' + addr.slice(-4)
 }
 
-function LeaderboardPage() {
+function HeroesBoardPage() {
   const { connection } = useConnection()
   const [leaders, setLeaders] = useState<LeaderEntry[]>([])
   const [loading, setLoading] = useState(true)
@@ -149,4 +149,4 @@ function LeaderboardPage() {
   )
 }
 
-export default LeaderboardPage
+export default HeroesBoardPage

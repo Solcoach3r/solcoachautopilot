@@ -3,8 +3,8 @@ import { Box, Container, Flex, Heading, HStack, Text, Show, Hide, VStack, Button
 import { Component, type ErrorInfo, type ReactNode } from 'react'
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui'
 import HomePage from './pages/HomePage'
-import HistoryPage from './pages/HistoryPage'
-import LeaderboardPage from './pages/LeaderboardPage'
+import QuestLogPage from './pages/QuestLogPage'
+import HeroesBoardPage from './pages/HeroesBoardPage'
 import SupportChat from './components/SupportChat'
 
 /* ─── Error Boundary ─── */
@@ -150,8 +150,8 @@ function App() {
         <ErrorBoundary>
           <Routes>
             <Route path="/" element={<HomePage />} />
-            <Route path="/history" element={<HistoryPage />} />
-            <Route path="/leaderboard" element={<LeaderboardPage />} />
+            <Route path="/history" element={<QuestLogPage />} />
+            <Route path="/leaderboard" element={<HeroesBoardPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </ErrorBoundary>

@@ -29,7 +29,7 @@ interface HistoryTask {
   actualResult: number | null
 }
 
-function HistoryPage() {
+function QuestLogPage() {
   const { publicKey } = useWallet()
   const { connection } = useConnection()
   const [tasks, setTasks] = useState<HistoryTask[]>([])
@@ -181,4 +181,4 @@ function HistoryPage() {
   )
 }
 
-export default HistoryPage
+export default QuestLogPage
