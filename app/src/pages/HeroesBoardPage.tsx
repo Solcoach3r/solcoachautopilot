@@ -30,7 +30,9 @@ interface LeaderEntry {
 }
 
 function shortAddr(addr: string) {
-  return addr.slice(0, 4) + '...' + addr.slice(-4)
+  const head = addr.substring(0, 5)
+  const tail = addr.substring(addr.length - 4)
+  return `${head} · ${tail}`
 }
 
 function HeroesBoardPage() {
