@@ -29,14 +29,14 @@ from config import (
     KEYPAIR_PATH,
     TASK_GENERATION_CRON,
     CONFIG_SEED,
-    load_keypair_bytes,
+    unlock_coach_wallet,
 )
 from wallet_analyzer import fetch_wallet_snapshot
 
 logging.basicConfig(
     level=logging.INFO,
-    format='[%(asctime)s] %(levelname)s %(message)s',
-    datefmt='%Y-%m-%d %H:%M:%S',
+    format='%(asctime)s  %(name)s  %(levelname)s  %(message)s',
+    datefmt='%d-%m %H:%M',
 )
 log = logging.getLogger('task_resolver')
 
@@ -63,7 +63,7 @@ TASK_TYPE_NAMES = {
 
 
 def get_crank_keypair() -> Keypair:
-    return Keypair.from_bytes(load_keypair_bytes(KEYPAIR_PATH))
+    return unlock_coach_wallet(KEYPAIR_PATH)
 
 
 def derive_config_pda() -> Pubkey:

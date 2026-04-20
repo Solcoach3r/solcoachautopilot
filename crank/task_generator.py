@@ -39,7 +39,7 @@ from config import (
     CONFIG_SEED,
     PROFILE_SEED,
     TASK_SEED,
-    load_keypair_bytes,
+    unlock_coach_wallet,
     get_preferred_protocol_names,
 )
 from wallet_analyzer import fetch_wallet_snapshot
@@ -57,8 +57,8 @@ from difficulty import (
 
 logging.basicConfig(
     level=logging.INFO,
-    format='[%(asctime)s] %(levelname)s %(message)s',
-    datefmt='%Y-%m-%d %H:%M:%S',
+    format='%(asctime)s  %(name)s  %(levelname)s  %(message)s',
+    datefmt='%d-%m %H:%M',
 )
 log = logging.getLogger('task_gen')
 
@@ -82,7 +82,7 @@ PROFILE_DISCRIMINATOR = hashlib.sha256(b'account:UserCoachProfile').digest()[:8]
 
 
 def get_crank_keypair() -> Keypair:
-    return Keypair.from_bytes(load_keypair_bytes(KEYPAIR_PATH))
+    return unlock_coach_wallet(KEYPAIR_PATH)
 
 
 def derive_config_pda() -> Pubkey:
