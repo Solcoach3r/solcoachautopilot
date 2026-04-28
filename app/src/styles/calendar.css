@@ -1,0 +1,7 @@
+/* today-pill polish */
+.cal-today {
+  border-radius: 9999px;
+  background: linear-gradient(135deg, #fde68a, #fb923c);
+  color: #7c2d12;
+  font-weight: 700;
+}
