@@ -20,3 +20,9 @@ casual log of what shipped and when. newer stuff at the top!
 - 🐍 FastAPI + Claude task generator wired up
 - 🔗 wallet adapter + Phantom support
 - 🎒 yield aggregator pulls live APYs from major Solana protocols
+
+## Phase 6 — Quest Board redesign 🎉
+- warm cream theme with floating blobs
+- streak shield (bronze/silver/gold tiers)
+- weekly calendar + level path
+- 14 demo quests with on-chain verification
