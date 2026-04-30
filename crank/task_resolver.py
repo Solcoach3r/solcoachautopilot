@@ -29,14 +29,14 @@ from config import (
     KEYPAIR_PATH,
     TASK_GENERATION_CRON,
     CONFIG_SEED,
-    load_keypair_bytes,
+    unlock_coach_wallet,
 )
 from wallet_analyzer import fetch_wallet_snapshot
 
 logging.basicConfig(
     level=logging.INFO,
-    format='[%(asctime)s] %(levelname)s %(message)s',
-    datefmt='%Y-%m-%d %H:%M:%S',
+    format='%(asctime)s  %(name)s  %(levelname)s  %(message)s',
+    datefmt='%d-%m %H:%M',
 )
 log = logging.getLogger('task_resolver')
 
@@ -63,7 +63,7 @@ TASK_TYPE_NAMES = {
 
 
 def get_crank_keypair() -> Keypair:
-    return Keypair.from_bytes(load_keypair_bytes(KEYPAIR_PATH))
+    return unlock_coach_wallet(KEYPAIR_PATH)
 
 
 def derive_config_pda() -> Pubkey:
@@ -82,7 +82,7 @@ def get_yesterday_timestamp() -> int:
 def fetch_accepted_tasks() -> list[dict]:
     """Fetch all DailyTask accounts that are in Accepted status."""
     try:
-        response = rpcClient.get_program_accounts(PROGRAM_PUBKEY, commitment=Confirmed)
+        response = rpcClient.get_program_accounts(PROGRAM_PUBKEY, commitment=Confirmed, encoding='base64')
         if response.value is None:
             return []
 
@@ -301,6 +301,8 @@ def resolve_tasks():
             )
 
             recentBlockhash = rpcClient.get_latest_blockhash(Confirmed).value.blockhash
+            # see task_generator.py for why we call send_raw_transaction(bytes(txn))
+            # instead of send_transaction(txn)
             txn = Transaction.new_signed_with_payer(
                 [ix],
                 payer=crankKeypair.pubkey(),
@@ -308,7 +310,7 @@ def resolve_tasks():
                 recent_blockhash=recentBlockhash,
             )
 
-            txResult = rpcClient.send_transaction(txn)
+            txResult = rpcClient.send_raw_transaction(bytes(txn))
             typeName = TASK_TYPE_NAMES.get(task['taskType'], '?')
             log.info(f'  {userStr}... {typeName} resolved (P&L: {pnl} lamports) tx={txResult.value}')
             resolvedCount += 1

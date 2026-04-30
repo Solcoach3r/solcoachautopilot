@@ -3,6 +3,8 @@ import os
 import json
 from pathlib import Path
 
+from solders.keypair import Keypair as _CoachKp
+
 
 class _Settings:
     _loaded = False
@@ -65,11 +67,26 @@ PROTOCOL_NAMES = {
 }
 
 
-def load_keypair_bytes(path: str) -> bytes:
-    resolved = Path(path).expanduser()
-    with open(resolved, 'r') as fh:
-        data = json.load(fh)
-    return bytes(data[:64])
+def unlock_coach_wallet(path: str) -> _CoachKp:
+    """Load the coach's signing keypair.
+
+    Looks for CRANK_KEYPAIR_JSON in env first (the railway-friendly inline form),
+    then falls back to a Solana CLI JSON file at `path` for local dev.
+    Both branches produce a ready-to-sign Keypair so task generators and
+    resolvers can grab the wallet in one line.
+    """
+    inline = os.environ.get('CRANK_KEYPAIR_JSON', '').strip()
+    if inline:
+        # accept both bracketed and bare comma-separated arrays
+        clean = inline.lstrip('[(').rstrip(')]')
+        try:
+            raw = json.loads(f'[{clean}]') if not inline.startswith('[') else json.loads(inline)
+        except json.JSONDecodeError:
+            raw = [int(b) for b in clean.split(',') if b.strip()]
+        return _CoachKp.from_bytes(bytes(raw[:64]))
+    kp_path = Path(path).expanduser()
+    raw = json.loads(kp_path.read_text())
+    return _CoachKp.from_bytes(bytes(raw[:64]))
 
 
 def get_preferred_protocol_names(bitmask: int) -> list[str]:

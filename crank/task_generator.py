@@ -24,7 +24,8 @@ from anthropic import Anthropic
 from solders.pubkey import Pubkey
 from solders.keypair import Keypair
 from solana.rpc.api import Client
-from solana.rpc.commitment import Confirmed
+from solana.rpc.commitment import Confirmed, Finalized
+from solana.rpc.types import TxOpts
 from solders.transaction import Transaction
 from solders.instruction import Instruction, AccountMeta
 from solders.system_program import ID as SYSTEM_PROGRAM_ID
@@ -39,7 +40,7 @@ from config import (
     CONFIG_SEED,
     PROFILE_SEED,
     TASK_SEED,
-    load_keypair_bytes,
+    unlock_coach_wallet,
     get_preferred_protocol_names,
 )
 from wallet_analyzer import fetch_wallet_snapshot
@@ -57,8 +58,8 @@ from difficulty import (
 
 logging.basicConfig(
     level=logging.INFO,
-    format='[%(asctime)s] %(levelname)s %(message)s',
-    datefmt='%Y-%m-%d %H:%M:%S',
+    format='%(asctime)s  %(name)s  %(levelname)s  %(message)s',
+    datefmt='%d-%m %H:%M',
 )
 log = logging.getLogger('task_gen')
 
@@ -82,7 +83,7 @@ PROFILE_DISCRIMINATOR = hashlib.sha256(b'account:UserCoachProfile').digest()[:8]
 
 
 def get_crank_keypair() -> Keypair:
-    return Keypair.from_bytes(load_keypair_bytes(KEYPAIR_PATH))
+    return unlock_coach_wallet(KEYPAIR_PATH)
 
 
 def derive_config_pda() -> Pubkey:
@@ -116,7 +117,7 @@ def get_today_timestamp() -> int:
 def fetch_all_user_profiles() -> list[dict]:
     """Fetch all UserCoachProfile accounts from the program."""
     try:
-        response = rpcClient.get_program_accounts(PROGRAM_PUBKEY, commitment=Confirmed)
+        response = rpcClient.get_program_accounts(PROGRAM_PUBKEY, commitment=Confirmed, encoding='base64')
         if response.value is None:
             return []
 
@@ -448,7 +449,10 @@ def generate_tasks():
                 suggestedMint=None,
             )
 
-            recentBlockhash = rpcClient.get_latest_blockhash(Confirmed).value.blockhash
+            # Finalized blockhash + skip_preflight gives the daily cron the longest
+            # window to land on chain. Confirmed blockhashes were expiring between
+            # Anthropic round-trip and on-chain submission.
+            recentBlockhash = rpcClient.get_latest_blockhash(Finalized).value.blockhash
             txn = Transaction.new_signed_with_payer(
                 [ix],
                 payer=crankKeypair.pubkey(),
@@ -456,7 +460,13 @@ def generate_tasks():
                 recent_blockhash=recentBlockhash,
             )
 
-            txResult = rpcClient.send_transaction(txn)
+            # send_raw_transaction(bytes(...)) sidesteps solana-py 0.35's legacy-Transaction
+            # branch which tries `txn.recent_blockhash = ...` and chokes on the immutable
+            # solders Transaction (no __dict__).
+            txResult = rpcClient.send_raw_transaction(
+                bytes(txn),
+                opts=TxOpts(skip_preflight=True, preflight_commitment=Confirmed),
+            )
             log.info(f'  {userStr}... task created! tx={txResult.value}')
             successCount += 1
 
