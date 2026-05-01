@@ -99,10 +99,13 @@ function HeroesBoardPage() {
           <Spinner color="brand.500" size="lg" />
         </Flex>
       ) : leaders.length === 0 ? (
-        <Card borderRadius="xl">
-          <CardBody p={8} textAlign="center">
-            <Text fontSize="xl" mb={2}>🏆</Text>
-            <Text color="gray.400">No coaches yet — be the first to start a streak!</Text>
+        <Card borderRadius="xl" bgGradient="linear(to-br, orange.50, yellow.50)">
+          <CardBody p={10} textAlign="center">
+            <Text fontSize="5xl" mb={3} role="img" aria-label="hero with cape">🦸</Text>
+            <Heading size="md" mb={2}>The board's empty… for now</Heading>
+            <Text color="gray.500" maxW="md" mx="auto">
+              No streaks logged yet. Connect a wallet, accept your first quest, and your name lands right here. First in is first up — be the hero.
+            </Text>
           </CardBody>
         </Card>
       ) : (
