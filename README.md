@@ -6,10 +6,14 @@ Your AI-powered DeFi coach on Solana. Daily tasks. Streaks. Level up your on-cha
 
 ## How It Works
 
-1. **Connect your wallet** - SolCoach analyzes your on-chain history
-2. **Get your daily task** - Personalized DeFi actions based on your level
-3. **Complete & earn streaks** - Duolingo-style streak counter keeps you coming back
-4. **Level up** - From DeFi Newbie to Solana Sensei
+1. **Connect your wallet** 🪪 — SolCoach takes a friendly peek at your on-chain history (read-only, never custodial)
+2. **Pick your role** 🌱 — quick onboarding quiz puts you on a learning path that matches your style (degen, builder, saver, etc.)
+3. **Get your daily quest** 🎯 — personalized DeFi action that fits your level, with a real on-chain verification step
+4. **Complete it & extend the streak** 🔥 — Streak Shield grows, calendar marks the day, the coach drops a tiny celebration
+5. **Level up** 🪜 — DeFi Newbie → Curious Explorer → Yield Hunter → Protocol Pro → Solana Sensei
+6. **Ask the coach anything** 💬 — built-in chat (Claude Haiku) explains concepts in plain language whenever you're stuck
+
+> Miss a day? The shield cracks but doesn't shatter — first miss = warning, second miss = streak resets. Be kind to yourself, just show up tomorrow.
 
 ## What kind of tasks?
 
@@ -42,7 +46,13 @@ cd app && npm install && npm run dev
 
 ## GIF Demos
 
-> Coming soon - stay tuned!
+> Coming soon! Drop yours into `docs/gifs/` and link them below 📸
+
+| flow | preview |
+|---|---|
+| onboarding quiz → first quest | _docs/gifs/onboarding.gif_ |
+| accept quest → verify on-chain → streak +1 | _docs/gifs/streak.gif_ |
+| weekly calendar fill animation | _docs/gifs/calendar.gif_ |
 
 ## License
 
