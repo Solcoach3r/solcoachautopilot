@@ -10,7 +10,8 @@ Keep answers short (2-4 sentences). Use emoji sparingly. Be warm and encouraging
 If asked about something unrelated to crypto/DeFi/Solana, gently redirect.
 The app runs on Solana devnet — remind users to use devnet SOL from faucet if needed.`
 
-const ALLOWED_ORIGIN = process.env.CORS_ORIGIN || 'http://localhost:5174'
+const ALLOWED_ORIGIN = process.env.CORS_ORIGIN || '*'
+const PORT = parseInt(process.env.PORT || '3099', 10)
 const MAX_MSG_LEN = 500
 const MAX_MSGS = 20
 
@@ -57,4 +58,4 @@ http.createServer(async (req, res) => {
     res.writeHead(500, { 'Content-Type': 'application/json' })
     res.end(JSON.stringify({ error: 'API request failed' }))
   }
-}).listen(3099, () => console.log('[chat] listening on :3099'))
+}).listen(PORT, () => console.log(`[chat] listening on :${PORT} (cors: ${ALLOWED_ORIGIN})`))

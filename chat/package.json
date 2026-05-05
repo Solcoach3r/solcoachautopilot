@@ -1,0 +1,13 @@
+{
+  "name": "solcoach-chat",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "tiny anthropic proxy that lets the frontend ask the coach questions without exposing the api key",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node chat-server.mjs"
+  }
+}
