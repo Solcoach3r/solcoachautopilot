@@ -1,6 +1,6 @@
 # coach crank deps
 # ── signing + rpc ──
-solana-py==0.34.0
+solana==0.34.0
 solders==0.21.0
 anchorpy==0.20.1
 
