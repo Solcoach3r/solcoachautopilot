@@ -1,0 +1,34 @@
+# solcoach autopilot — vercel deploy boundary
+# only the vite frontend in app/ ships to vercel.
+# everything below is either rust on-chain, python crank, or the chat
+# microservice — all hosted elsewhere.
+
+# ── on-chain side (anchor + rust) ──
+programs/
+target/
+tests/
+migrations/
+Cargo.toml
+Cargo.lock
+Anchor.toml
+
+# ── python crank (railway service #2) ──
+crank/
+
+# ── node chat proxy (railway service #1) ──
+chat/
+
+# ── secrets ──
+deploy-keypair.json
+*-keypair.json
+.env
+.env.*
+!.env.example
+
+# ── routine cruft ──
+node_modules/
+**/node_modules/
+dist/
+**/dist/
+*.log
+.DS_Store
