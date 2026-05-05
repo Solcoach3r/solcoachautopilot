@@ -31,7 +31,7 @@ Execute a swap or limit order. Examples:
 Risk management activities. Examples:
 - "Open a 1× short on Drift to hedge a 1 SOL spot"
 - "Set a 5% stop-loss on your largest position"
-- "Check liquidation buffer in Sentinel"
+- "Check your liquidation buffer on a margin account"
 
 ## 🌐 DePIN
 Hardware-network interactions. Examples:
