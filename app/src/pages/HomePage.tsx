@@ -578,8 +578,12 @@ function HomePage() {
 
   useEffect(() => { loadData() }, [loadData])
 
-  // Use on-chain profile data when available, fall back to localStorage for demo
-  const localVerified = Number(localStorage.getItem('solcoach_verified') || '0') + (verified ? 1 : 0)
+  // Use on-chain profile data when available, fall back to per-wallet localStorage demo counter.
+  // Key is scoped by pubkey so a fresh wallet always starts at zero.
+  const verifyKey = publicKey ? `solcoach_verified_${publicKey.toBase58()}` : null
+  const localVerified = verifyKey
+    ? Number(localStorage.getItem(verifyKey) || '0') + (verified ? 1 : 0)
+    : 0
   const streak = profile ? profile.currentStreak : localVerified
   const bestStreak = profile ? profile.bestStreak : localVerified
   const tasksCompleted = profile ? profile.tasksAccepted : localVerified
@@ -649,8 +653,10 @@ function HomePage() {
         }
         if (found) {
           setVerified(true)
-          const prev = Number(localStorage.getItem('solcoach_verified') || '0')
-          localStorage.setItem('solcoach_verified', String(prev + 1))
+          if (verifyKey) {
+            const prev = Number(localStorage.getItem(verifyKey) || '0')
+            localStorage.setItem(verifyKey, String(prev + 1))
+          }
           toast({ title: 'Quest verified! ✅🎉', description: `Found ${task.protocol} tx: ${found.signature.slice(0, 16)}...`, status: 'success', duration: 4000 })
         } else {
           toast({
@@ -680,15 +686,17 @@ function HomePage() {
       }
       if (recentTx) {
         setVerified(true)
-        const prev = Number(localStorage.getItem('solcoach_verified') || '0')
-        localStorage.setItem('solcoach_verified', String(prev + 1))
+        if (verifyKey) {
+          const prev = Number(localStorage.getItem(verifyKey) || '0')
+          localStorage.setItem(verifyKey, String(prev + 1))
+        }
         toast({ title: 'Quest verified! ✅🎉', description: `Found tx: ${recentTx.signature.slice(0, 16)}...`, status: 'success', duration: 4000 })
       } else {
         toast({ title: 'No activity found', description: 'Complete the quest first', status: 'warning', duration: 3000 })
       }
     } catch { toast({ title: 'Verification failed', status: 'error', duration: 2000 }) }
     finally { setActionLoading(false) }
-  }, [publicKey, connection, toast, task])
+  }, [publicKey, connection, toast, task, verifyKey])
 
   /* ─── RENDER ─── */
 
