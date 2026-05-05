@@ -673,7 +673,9 @@ function HomePage() {
     }
 
     try {
-      const FLIPORDRAIN_ID = '8SXWVRBFoPCqbLZiDA9oY9EFbD9NVbU7SryoxJQt3ssG'
+      // Generic verify: count any successful tx from the wallet in the last 24h
+      // that touches a non-system program (i.e. real DeFi/SPL activity, not a plain transfer).
+      const SYSTEM_PROGRAM = '11111111111111111111111111111111'
       const sigs = await connection.getSignaturesForAddress(publicKey, { limit: 15 })
       let recentTx = null
       for (const s of sigs) {
@@ -681,8 +683,10 @@ function HomePage() {
         const age = Date.now() / 1000 - (s.blockTime || 0)
         if (age > 86400) break
         const tx = await connection.getParsedTransaction(s.signature, { maxSupportedTransactionVersion: 0 })
-        const usesFlip = tx?.transaction?.message?.instructions?.some((i: any) => i.programId?.toBase58() === FLIPORDRAIN_ID)
-        if (usesFlip) { recentTx = s; break }
+        const touchesProgram = tx?.transaction?.message?.instructions?.some(
+          (i: any) => i.programId && i.programId.toBase58() !== SYSTEM_PROGRAM,
+        )
+        if (touchesProgram) { recentTx = s; break }
       }
       if (recentTx) {
         setVerified(true)
