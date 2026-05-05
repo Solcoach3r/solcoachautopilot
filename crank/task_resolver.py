@@ -82,7 +82,7 @@ def get_yesterday_timestamp() -> int:
 def fetch_accepted_tasks() -> list[dict]:
     """Fetch all DailyTask accounts that are in Accepted status."""
     try:
-        response = rpcClient.get_program_accounts(PROGRAM_PUBKEY, commitment=Confirmed)
+        response = rpcClient.get_program_accounts(PROGRAM_PUBKEY, commitment=Confirmed, encoding='base64')
         if response.value is None:
             return []
 

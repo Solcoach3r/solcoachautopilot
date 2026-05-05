@@ -116,7 +116,7 @@ def get_today_timestamp() -> int:
 def fetch_all_user_profiles() -> list[dict]:
     """Fetch all UserCoachProfile accounts from the program."""
     try:
-        response = rpcClient.get_program_accounts(PROGRAM_PUBKEY, commitment=Confirmed)
+        response = rpcClient.get_program_accounts(PROGRAM_PUBKEY, commitment=Confirmed, encoding='base64')
         if response.value is None:
             return []
 
