@@ -2,6 +2,8 @@
 
 Your AI-powered DeFi coach on Solana. Daily tasks. Streaks. Level up your on-chain game.
 
+> try it live on devnet → **[solcoach.vercel.app](https://solcoach.vercel.app)**
+
 ---
 
 ## How It Works
