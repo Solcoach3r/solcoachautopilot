@@ -600,10 +600,10 @@ function HomePage() {
       await new Promise(r => setTimeout(r, 600)) // brief delay for UX
       if (action === 'accept') {
         setTask(prev => prev ? { ...prev, status: 'Accepted' } : null)
-        toast({ title: 'Quest accepted! 🔥', description: 'Complete it to grow your streak', status: 'success', duration: 3000 })
+        toast({ title: "You're in! 🔥", description: 'Finish the quest before midnight UTC to keep the streak alive', status: 'success', duration: 3000 })
       } else {
         setTask(prev => prev ? { ...prev, status: 'Rejected' } : null)
-        toast({ title: 'Quest skipped', status: 'info', duration: 2000 })
+        toast({ title: 'Skipped — no big deal', description: 'New quest tomorrow', status: 'info', duration: 2000 })
       }
       setActionLoading(false)
       return
