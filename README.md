@@ -58,4 +58,6 @@ cd app && npm install && npm run dev
 
 ## License
 
-MIT
+Shipped under MIT — full text lives in [LICENSE](LICENSE) 📜
+
+Fork it, remix it, build your own coach on top — no permission slip required. Just keep the copyright line so future you remembers where the streak started 🔥
