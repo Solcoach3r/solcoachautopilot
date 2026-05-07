@@ -25,7 +25,7 @@ Your AI-powered DeFi coach on Solana. Daily tasks. Streaks. Level up your on-cha
 - "Mint a compressed NFT"
 - Tasks get harder as you level up!
 
-## Tech Stack
+## What's wired up
 
 - **Smart Contracts**: Anchor (streak tracking, achievements on-chain)
 - **Frontend**: Vite + React + Chakra UI
@@ -33,7 +33,7 @@ Your AI-powered DeFi coach on Solana. Daily tasks. Streaks. Level up your on-cha
 - **Font**: Nunito
 - **Design**: Warm gradients, mobile-first, gamified
 
-## Getting Started
+## Spin it up
 
 ```bash
 # Smart contracts
