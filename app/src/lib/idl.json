@@ -1,0 +1,1132 @@
+{
+  "address": "FoTaz3ejexSZgd9byVc1FpgqqqunBno7rx7ahfRMZMkU",
+  "metadata": {
+    "name": "solcoach",
+    "version": "0.1.0",
+    "spec": "0.1.0",
+    "description": "AI coach with daily DeFi tasks and streaks"
+  },
+  "instructions": [
+    {
+      "name": "accept_task",
+      "discriminator": [
+        222,
+        196,
+        79,
+        165,
+        120,
+        30,
+        38,
+        120
+      ],
+      "accounts": [
+        {
+          "name": "task",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  97,
+                  115,
+                  107
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "user"
+              },
+              {
+                "kind": "account",
+                "path": "task.day",
+                "account": "DailyTask"
+              }
+            ]
+          }
+        },
+        {
+          "name": "profile",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  97,
+                  99,
+                  104,
+                  95,
+                  112,
+                  114,
+                  111,
+                  102,
+                  105,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "user"
+              }
+            ]
+          }
+        },
+        {
+          "name": "user",
+          "signer": true
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "create_daily_task",
+      "discriminator": [
+        156,
+        243,
+        166,
+        150,
+        250,
+        162,
+        157,
+        79
+      ],
+      "accounts": [
+        {
+          "name": "config",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  97,
+                  99,
+                  104,
+                  95,
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "profile",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  97,
+                  99,
+                  104,
+                  95,
+                  112,
+                  114,
+                  111,
+                  102,
+                  105,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "user"
+              }
+            ]
+          }
+        },
+        {
+          "name": "task",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  97,
+                  115,
+                  107
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "user"
+              },
+              {
+                "kind": "arg",
+                "path": "day_timestamp"
+              }
+            ]
+          }
+        },
+        {
+          "name": "user"
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "day_timestamp",
+          "type": "i64"
+        },
+        {
+          "name": "task_type",
+          "type": {
+            "defined": {
+              "name": "TaskType"
+            }
+          }
+        },
+        {
+          "name": "protocol",
+          "type": "string"
+        },
+        {
+          "name": "description",
+          "type": "string"
+        },
+        {
+          "name": "reasoning",
+          "type": "string"
+        },
+        {
+          "name": "suggested_amount",
+          "type": "u64"
+        },
+        {
+          "name": "suggested_mint",
+          "type": {
+            "option": "pubkey"
+          }
+        }
+      ]
+    },
+    {
+      "name": "initialize_config",
+      "discriminator": [
+        208,
+        127,
+        21,
+        1,
+        194,
+        190,
+        196,
+        70
+      ],
+      "accounts": [
+        {
+          "name": "config",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  97,
+                  99,
+                  104,
+                  95,
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "tip_vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  105,
+                  112,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "tip_fee_bps",
+          "type": "u16"
+        }
+      ]
+    },
+    {
+      "name": "register_user",
+      "discriminator": [
+        2,
+        241,
+        150,
+        223,
+        99,
+        214,
+        116,
+        97
+      ],
+      "accounts": [
+        {
+          "name": "config",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  97,
+                  99,
+                  104,
+                  95,
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "profile",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  97,
+                  99,
+                  104,
+                  95,
+                  112,
+                  114,
+                  111,
+                  102,
+                  105,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "user"
+              }
+            ]
+          }
+        },
+        {
+          "name": "user",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "risk_tolerance",
+          "type": {
+            "defined": {
+              "name": "RiskTolerance"
+            }
+          }
+        },
+        {
+          "name": "preferred_protocols",
+          "type": "u8"
+        }
+      ]
+    },
+    {
+      "name": "reject_task",
+      "discriminator": [
+        152,
+        59,
+        207,
+        37,
+        222,
+        254,
+        28,
+        106
+      ],
+      "accounts": [
+        {
+          "name": "task",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  97,
+                  115,
+                  107
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "user"
+              },
+              {
+                "kind": "account",
+                "path": "task.day",
+                "account": "DailyTask"
+              }
+            ]
+          }
+        },
+        {
+          "name": "profile",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  97,
+                  99,
+                  104,
+                  95,
+                  112,
+                  114,
+                  111,
+                  102,
+                  105,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "user"
+              }
+            ]
+          }
+        },
+        {
+          "name": "user",
+          "signer": true
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "resolve_task",
+      "discriminator": [
+        116,
+        245,
+        180,
+        251,
+        30,
+        233,
+        101,
+        33
+      ],
+      "accounts": [
+        {
+          "name": "config",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  97,
+                  99,
+                  104,
+                  95,
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "task",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  97,
+                  115,
+                  107
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "task.user",
+                "account": "DailyTask"
+              },
+              {
+                "kind": "account",
+                "path": "task.day",
+                "account": "DailyTask"
+              }
+            ]
+          }
+        },
+        {
+          "name": "authority",
+          "signer": true
+        }
+      ],
+      "args": [
+        {
+          "name": "actual_result",
+          "type": "i64"
+        }
+      ]
+    },
+    {
+      "name": "tip_coach",
+      "discriminator": [
+        158,
+        13,
+        105,
+        141,
+        184,
+        4,
+        226,
+        223
+      ],
+      "accounts": [
+        {
+          "name": "config",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  97,
+                  99,
+                  104,
+                  95,
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "task",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  97,
+                  115,
+                  107
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "user"
+              },
+              {
+                "kind": "account",
+                "path": "task.day",
+                "account": "DailyTask"
+              }
+            ]
+          }
+        },
+        {
+          "name": "profile",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  97,
+                  99,
+                  104,
+                  95,
+                  112,
+                  114,
+                  111,
+                  102,
+                  105,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "user"
+              }
+            ]
+          }
+        },
+        {
+          "name": "tip_vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  105,
+                  112,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "treasury",
+          "writable": true
+        },
+        {
+          "name": "user",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "update_preferences",
+      "discriminator": [
+        16,
+        64,
+        128,
+        133,
+        19,
+        206,
+        101,
+        159
+      ],
+      "accounts": [
+        {
+          "name": "profile",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  97,
+                  99,
+                  104,
+                  95,
+                  112,
+                  114,
+                  111,
+                  102,
+                  105,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "user"
+              }
+            ]
+          }
+        },
+        {
+          "name": "user",
+          "signer": true
+        }
+      ],
+      "args": [
+        {
+          "name": "risk_tolerance",
+          "type": {
+            "option": {
+              "defined": {
+                "name": "RiskTolerance"
+              }
+            }
+          }
+        },
+        {
+          "name": "preferred_protocols",
+          "type": {
+            "option": "u8"
+          }
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "CoachConfig",
+      "discriminator": [
+        121,
+        116,
+        14,
+        178,
+        166,
+        195,
+        165,
+        168
+      ]
+    },
+    {
+      "name": "DailyTask",
+      "discriminator": [
+        129,
+        245,
+        44,
+        63,
+        155,
+        124,
+        94,
+        234
+      ]
+    },
+    {
+      "name": "TipVault",
+      "discriminator": [
+        142,
+        77,
+        243,
+        158,
+        142,
+        87,
+        253,
+        9
+      ]
+    },
+    {
+      "name": "UserCoachProfile",
+      "discriminator": [
+        90,
+        161,
+        146,
+        71,
+        227,
+        52,
+        124,
+        74
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "Unauthorized",
+      "msg": "You're not authorized to do this"
+    },
+    {
+      "code": 6001,
+      "name": "TaskAlreadyHandled",
+      "msg": "This task has already been accepted or rejected"
+    },
+    {
+      "code": 6002,
+      "name": "TaskExistsForToday",
+      "msg": "There's already a task for today!"
+    },
+    {
+      "code": 6003,
+      "name": "TaskExpired",
+      "msg": "This task has expired (24h passed)"
+    },
+    {
+      "code": 6004,
+      "name": "CannotTipRejected",
+      "msg": "Can't tip for a rejected task"
+    },
+    {
+      "code": 6005,
+      "name": "InsufficientFunds",
+      "msg": "Not enough SOL for this"
+    },
+    {
+      "code": 6006,
+      "name": "MathOverflow",
+      "msg": "Math overflow happened"
+    },
+    {
+      "code": 6007,
+      "name": "DescriptionTooLong",
+      "msg": "Description is too long"
+    },
+    {
+      "code": 6008,
+      "name": "ProtocolTooLong",
+      "msg": "Protocol name is too long"
+    },
+    {
+      "code": 6009,
+      "name": "InvalidTaskStatus",
+      "msg": "Task is not in the right status for this"
+    }
+  ],
+  "types": [
+    {
+      "name": "CoachConfig",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "tip_fee_bps",
+            "type": "u16"
+          },
+          {
+            "name": "treasury",
+            "type": "pubkey"
+          },
+          {
+            "name": "total_users",
+            "type": "u64"
+          },
+          {
+            "name": "total_tips_collected",
+            "type": "u64"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "DailyTask",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "user",
+            "type": "pubkey"
+          },
+          {
+            "name": "day",
+            "type": "i64"
+          },
+          {
+            "name": "task_type",
+            "type": {
+              "defined": {
+                "name": "TaskType"
+              }
+            }
+          },
+          {
+            "name": "protocol",
+            "type": "string"
+          },
+          {
+            "name": "description",
+            "type": "string"
+          },
+          {
+            "name": "reasoning",
+            "type": "string"
+          },
+          {
+            "name": "suggested_amount",
+            "type": "u64"
+          },
+          {
+            "name": "suggested_mint",
+            "type": {
+              "option": "pubkey"
+            }
+          },
+          {
+            "name": "status",
+            "type": {
+              "defined": {
+                "name": "TaskStatus"
+              }
+            }
+          },
+          {
+            "name": "tip_amount",
+            "type": "u64"
+          },
+          {
+            "name": "actual_result",
+            "type": {
+              "option": "i64"
+            }
+          },
+          {
+            "name": "created_at",
+            "type": "i64"
+          },
+          {
+            "name": "resolved_at",
+            "type": {
+              "option": "i64"
+            }
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "RiskTolerance",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Conservative"
+          },
+          {
+            "name": "Moderate"
+          },
+          {
+            "name": "Aggressive"
+          }
+        ]
+      }
+    },
+    {
+      "name": "TaskStatus",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Pending"
+          },
+          {
+            "name": "Accepted"
+          },
+          {
+            "name": "Rejected"
+          },
+          {
+            "name": "Expired"
+          },
+          {
+            "name": "Resolved"
+          }
+        ]
+      }
+    },
+    {
+      "name": "TaskType",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Stake"
+          },
+          {
+            "name": "Unstake"
+          },
+          {
+            "name": "Swap"
+          },
+          {
+            "name": "Rebalance"
+          },
+          {
+            "name": "ClaimRewards"
+          },
+          {
+            "name": "AddLiquidity"
+          }
+        ]
+      }
+    },
+    {
+      "name": "TipVault",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "total_collected",
+            "type": "u64"
+          },
+          {
+            "name": "total_distributed",
+            "type": "u64"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "UserCoachProfile",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "user",
+            "type": "pubkey"
+          },
+          {
+            "name": "joined_at",
+            "type": "i64"
+          },
+          {
+            "name": "total_tasks_received",
+            "type": "u64"
+          },
+          {
+            "name": "tasks_accepted",
+            "type": "u64"
+          },
+          {
+            "name": "tasks_rejected",
+            "type": "u64"
+          },
+          {
+            "name": "current_streak",
+            "type": "u16"
+          },
+          {
+            "name": "best_streak",
+            "type": "u16"
+          },
+          {
+            "name": "total_tips_given",
+            "type": "u64"
+          },
+          {
+            "name": "total_profit_from_tips",
+            "type": "i64"
+          },
+          {
+            "name": "last_task_day",
+            "type": "i64"
+          },
+          {
+            "name": "risk_tolerance",
+            "type": {
+              "defined": {
+                "name": "RiskTolerance"
+              }
+            }
+          },
+          {
+            "name": "preferred_protocols",
+            "type": "u8"
+          },
+          {
+            "name": "is_pro",
+            "type": "bool"
+          },
+          {
+            "name": "pro_expires_at",
+            "type": {
+              "option": "i64"
+            }
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    }
+  ]
+}
