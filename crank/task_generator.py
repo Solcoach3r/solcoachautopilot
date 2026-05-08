@@ -24,8 +24,7 @@ from anthropic import Anthropic
 from solders.pubkey import Pubkey
 from solders.keypair import Keypair
 from solana.rpc.api import Client
-from solana.rpc.commitment import Confirmed, Finalized
-from solana.rpc.types import TxOpts
+from solana.rpc.commitment import Confirmed
 from solders.transaction import Transaction
 from solders.instruction import Instruction, AccountMeta
 from solders.system_program import ID as SYSTEM_PROGRAM_ID
@@ -449,10 +448,7 @@ def generate_tasks():
                 suggestedMint=None,
             )
 
-            # Finalized blockhash + skip_preflight gives the daily cron the longest
-            # window to land on chain. Confirmed blockhashes were expiring between
-            # Anthropic round-trip and on-chain submission.
-            recentBlockhash = rpcClient.get_latest_blockhash(Finalized).value.blockhash
+            recentBlockhash = rpcClient.get_latest_blockhash(Confirmed).value.blockhash
             txn = Transaction.new_signed_with_payer(
                 [ix],
                 payer=crankKeypair.pubkey(),
@@ -460,13 +456,7 @@ def generate_tasks():
                 recent_blockhash=recentBlockhash,
             )
 
-            # send_raw_transaction(bytes(...)) sidesteps solana-py 0.35's legacy-Transaction
-            # branch which tries `txn.recent_blockhash = ...` and chokes on the immutable
-            # solders Transaction (no __dict__).
-            txResult = rpcClient.send_raw_transaction(
-                bytes(txn),
-                opts=TxOpts(skip_preflight=True, preflight_commitment=Confirmed),
-            )
+            txResult = rpcClient.send_transaction(txn)
             log.info(f'  {userStr}... task created! tx={txResult.value}')
             successCount += 1
 

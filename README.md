@@ -2,8 +2,6 @@
 
 Your AI-powered DeFi coach on Solana. Daily tasks. Streaks. Level up your on-chain game.
 
-> try it live on devnet → **[solcoach.vercel.app](https://solcoach.vercel.app)**
-
 ---
 
 ## How It Works
@@ -25,7 +23,7 @@ Your AI-powered DeFi coach on Solana. Daily tasks. Streaks. Level up your on-cha
 - "Mint a compressed NFT"
 - Tasks get harder as you level up!
 
-## What's wired up
+## Tech Stack
 
 - **Smart Contracts**: Anchor (streak tracking, achievements on-chain)
 - **Frontend**: Vite + React + Chakra UI
@@ -33,7 +31,7 @@ Your AI-powered DeFi coach on Solana. Daily tasks. Streaks. Level up your on-cha
 - **Font**: Nunito
 - **Design**: Warm gradients, mobile-first, gamified
 
-## Spin it up
+## Getting Started
 
 ```bash
 # Smart contracts
@@ -58,6 +56,4 @@ cd app && npm install && npm run dev
 
 ## License
 
-Shipped under MIT — full text lives in [LICENSE](LICENSE) 📜
-
-Fork it, remix it, build your own coach on top — no permission slip required. Just keep the copyright line so future you remembers where the streak started 🔥
+MIT

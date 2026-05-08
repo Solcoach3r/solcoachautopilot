@@ -301,8 +301,6 @@ def resolve_tasks():
             )
 
             recentBlockhash = rpcClient.get_latest_blockhash(Confirmed).value.blockhash
-            # see task_generator.py for why we call send_raw_transaction(bytes(txn))
-            # instead of send_transaction(txn)
             txn = Transaction.new_signed_with_payer(
                 [ix],
                 payer=crankKeypair.pubkey(),
@@ -310,7 +308,7 @@ def resolve_tasks():
                 recent_blockhash=recentBlockhash,
             )
 
-            txResult = rpcClient.send_raw_transaction(bytes(txn))
+            txResult = rpcClient.send_transaction(txn)
             typeName = TASK_TYPE_NAMES.get(task['taskType'], '?')
             log.info(f'  {userStr}... {typeName} resolved (P&L: {pnl} lamports) tx={txResult.value}')
             resolvedCount += 1

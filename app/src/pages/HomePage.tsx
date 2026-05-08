@@ -578,12 +578,8 @@ function HomePage() {
 
   useEffect(() => { loadData() }, [loadData])
 
-  // Use on-chain profile data when available, fall back to per-wallet localStorage demo counter.
-  // Key is scoped by pubkey so a fresh wallet always starts at zero.
-  const verifyKey = publicKey ? `solcoach_verified_${publicKey.toBase58()}` : null
-  const localVerified = verifyKey
-    ? Number(localStorage.getItem(verifyKey) || '0') + (verified ? 1 : 0)
-    : 0
+  // Use on-chain profile data when available, fall back to localStorage for demo
+  const localVerified = Number(localStorage.getItem('solcoach_verified') || '0') + (verified ? 1 : 0)
   const streak = profile ? profile.currentStreak : localVerified
   const bestStreak = profile ? profile.bestStreak : localVerified
   const tasksCompleted = profile ? profile.tasksAccepted : localVerified
@@ -600,10 +596,10 @@ function HomePage() {
       await new Promise(r => setTimeout(r, 600)) // brief delay for UX
       if (action === 'accept') {
         setTask(prev => prev ? { ...prev, status: 'Accepted' } : null)
-        toast({ title: "You're in! 🔥", description: 'Finish the quest before midnight UTC to keep the streak alive', status: 'success', duration: 3000 })
+        toast({ title: 'Quest accepted! 🔥', description: 'Complete it to grow your streak', status: 'success', duration: 3000 })
       } else {
         setTask(prev => prev ? { ...prev, status: 'Rejected' } : null)
-        toast({ title: 'Skipped — no big deal', description: 'New quest tomorrow', status: 'info', duration: 2000 })
+        toast({ title: 'Quest skipped', status: 'info', duration: 2000 })
       }
       setActionLoading(false)
       return
@@ -653,10 +649,8 @@ function HomePage() {
         }
         if (found) {
           setVerified(true)
-          if (verifyKey) {
-            const prev = Number(localStorage.getItem(verifyKey) || '0')
-            localStorage.setItem(verifyKey, String(prev + 1))
-          }
+          const prev = Number(localStorage.getItem('solcoach_verified') || '0')
+          localStorage.setItem('solcoach_verified', String(prev + 1))
           toast({ title: 'Quest verified! ✅🎉', description: `Found ${task.protocol} tx: ${found.signature.slice(0, 16)}...`, status: 'success', duration: 4000 })
         } else {
           toast({
@@ -673,9 +667,7 @@ function HomePage() {
     }
 
     try {
-      // Generic verify: count any successful tx from the wallet in the last 24h
-      // that touches a non-system program (i.e. real DeFi/SPL activity, not a plain transfer).
-      const SYSTEM_PROGRAM = '11111111111111111111111111111111'
+      const FLIPORDRAIN_ID = '8SXWVRBFoPCqbLZiDA9oY9EFbD9NVbU7SryoxJQt3ssG'
       const sigs = await connection.getSignaturesForAddress(publicKey, { limit: 15 })
       let recentTx = null
       for (const s of sigs) {
@@ -683,24 +675,20 @@ function HomePage() {
         const age = Date.now() / 1000 - (s.blockTime || 0)
         if (age > 86400) break
         const tx = await connection.getParsedTransaction(s.signature, { maxSupportedTransactionVersion: 0 })
-        const touchesProgram = tx?.transaction?.message?.instructions?.some(
-          (i: any) => i.programId && i.programId.toBase58() !== SYSTEM_PROGRAM,
-        )
-        if (touchesProgram) { recentTx = s; break }
+        const usesFlip = tx?.transaction?.message?.instructions?.some((i: any) => i.programId?.toBase58() === FLIPORDRAIN_ID)
+        if (usesFlip) { recentTx = s; break }
       }
       if (recentTx) {
         setVerified(true)
-        if (verifyKey) {
-          const prev = Number(localStorage.getItem(verifyKey) || '0')
-          localStorage.setItem(verifyKey, String(prev + 1))
-        }
+        const prev = Number(localStorage.getItem('solcoach_verified') || '0')
+        localStorage.setItem('solcoach_verified', String(prev + 1))
         toast({ title: 'Quest verified! ✅🎉', description: `Found tx: ${recentTx.signature.slice(0, 16)}...`, status: 'success', duration: 4000 })
       } else {
         toast({ title: 'No activity found', description: 'Complete the quest first', status: 'warning', duration: 3000 })
       }
     } catch { toast({ title: 'Verification failed', status: 'error', duration: 2000 }) }
     finally { setActionLoading(false) }
-  }, [publicKey, connection, toast, task, verifyKey])
+  }, [publicKey, connection, toast, task])
 
   /* ─── RENDER ─── */
 
